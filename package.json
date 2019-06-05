@@ -23,10 +23,10 @@
     "eslint-config-google": "^0.9.1",
     "rollup": "^0.37.2",
     "uglify-es": "^3.0.24",
-    "watchify": "^3.8.0"
+    "watchify": "^3.11.1"
   },
   "scripts": {
-    "_mkdir": "mkdir -p build",
+    "_mkdir": " ",
     "build-min": "npm run _mkdir && browserify src/embed/main.js | derequire | uglifyjs -c > build/embed.min.js && npm run build-three-closure",
     "build-dev": "npm run _mkdir && browserify src/embed/main.js | derequire > build/embed.js && npm run build-three-closure",
     "build-analytics-min": "npm run _mkdir && browserify src/embed/with-analytics.js | derequire | uglifyjs -c > build/embed.min.js && npm run build-three-closure",

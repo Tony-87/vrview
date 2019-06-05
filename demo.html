@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>VR view</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="error" class="dialog">
+    <div class="wrap">
+      <h1 class="title">Error</h1>
+      <p class="message">An unknown error occurred.</p>
+    </div>
+  </div>
+
+  <div id="play-overlay">
+    <img src="images/ic_play_arrow_white_24dp.svg" />
+  </div>
+
+ 
+
+  <script>
+    WebVRConfig = {
+      BUFFER_SCALE: 0.5,
+      TOUCH_PANNER_DISABLED: false
+    };
+    // 页面配置，如果url参数没有配置，读取这里的配置信息
+    WebVRConfig.PLAYER = {
+      image: './examples/gallery/taj-mahal.jpg',
+      is_autopan_off: true,
+      hide_fullscreen_button:true
+      // video: 'video',
+      // image: 'image',
+      // preview: 'preview',
+      // loop: 'loop',
+      // volume: 'volume',
+      // muted: 'muted',
+      // isStereo: 'is_stereo',
+      // defaultYaw: 'default_yaw',
+      // isYawOnly: 'is_yaw_only',
+      // isDebug: 'is_debug',
+      // isVROff: 'is_vr_off',
+      // isAutopanOff: 'is_autopan_off',
+      // hideFullscreenButton: 'hide_fullscreen_button'
+    }
+  </script>
+
+  <script src="build/three.js"></script>
+  <script src="build/embed.js"></script>
+</body>
+
+</html>
