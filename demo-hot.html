@@ -32,9 +32,11 @@
     };
     // 页面配置，如果url参数没有配置，读取这里的配置信息
     WebVRConfig.PLAYER = {
-      image: './examples/gallery/taj-mahal.jpg',
+      image: './examples/hotspots/walrus.jpg',
       is_autopan_off: true,
-      hide_fullscreen_button: true
+      hide_fullscreen_button: true,
+      is_stereo: true,
+      is_autopan_off: true
       // video: 'video',
       // image: 'image',
       // preview: 'preview',
@@ -49,6 +51,11 @@
       // isAutopanOff: 'is_autopan_off',
       // hideFullscreenButton: 'hide_fullscreen_button'
     }
+
+    setTimeout(function () {
+
+      window.worldRenderer.hotspotRenderer.add(0, 20, 0.05, 1, 'abc')
+    }, 1000)
   </script>
 
   <script src="build/three.js"></script>

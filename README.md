@@ -12,23 +12,23 @@ mobile. For more information, please read the documentation available at
 
 A complete list of VR View parameters can be found in the table below.
 
-Name | Type | Parameter description
----- | ---- | ---------------------
-`video` | String | URL to a 360° video file or an adaptive streaming manifest file (.mpd or .m3u8). Exactly one of video or image is required.
-`image` | String | URL to a 360° image file. Exactly one of video or image is required.
-`width` | String | String value for the iframe's width attribute.
-`height` | String | String value for the iframe's height attribute.
-`preview` | String | (Optional) URL to a preview image for a 360° image file.
-`is_stereo` | Boolean | (Optional) Indicates whether the content at the image or video URL is stereo or not.
-`is_debug` | Boolean | (Optional) When true, turns on debug features like rendering hotspots ad showing the FPS meter.
-`is_vr_off` | Boolean | (Optional) When true, disables the VR mode button.
-`is_autopan_off` | Boolean | (Optional) When true, disables the autopan introduction on desktop.
-`default_yaw` | Number | (Optional) Numeric angle in degrees of the initial heading for the 360° content. By default, the camera points at the center of the underlying image.
-`is_yaw_only` | Boolean | (Optional) When true, prevents roll and pitch. This is intended for stereo panoramas.
-`loop` | Boolean | (Optional) When false, stops the loop in the video.
-`hide_fullscreen_button` | Boolean | (Optional) When true, the fullscreen button contained inside the VR View iframe will be hidden. This parameter is useful if the user wants to use VR View's fullscreen workflow (via `vrView.setFullscreen()` callback) with an element outside the iframe. 
-`volume` | Number | (Optional) The initial volume of the media; it ranges between 0 and 1; zero equals muted.
-`muted` | Boolean | (Optional) When true, mutes the sound of the video.
+| Name                     | Type    | Parameter description                                                                                                                                                                                                                                       |
+| ------------------------ | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `video`                  | String  | URL to a 360° video file or an adaptive streaming manifest file (.mpd or .m3u8). Exactly one of video or image is required.                                                                                                                                 |
+| `image`                  | String  | URL to a 360° image file. Exactly one of video or image is required.                                                                                                                                                                                        |
+| `width`                  | String  | String value for the iframe's width attribute.                                                                                                                                                                                                              |
+| `height`                 | String  | String value for the iframe's height attribute.                                                                                                                                                                                                             |
+| `preview`                | String  | (Optional) URL to a preview image for a 360° image file.                                                                                                                                                                                                    |
+| `is_stereo`              | Boolean | (Optional) Indicates whether the content at the image or video URL is stereo or not.                                                                                                                                                                        |
+| `is_debug`               | Boolean | (Optional) When true, turns on debug features like rendering hotspots ad showing the FPS meter.                                                                                                                                                             |
+| `is_vr_off`              | Boolean | (Optional) When true, disables the VR mode button.                                                                                                                                                                                                          |
+| `is_autopan_off`         | Boolean | (Optional) When true, disables the autopan introduction on desktop.                                                                                                                                                                                         |
+| `default_yaw`            | Number  | (Optional) Numeric angle in degrees of the initial heading for the 360° content. By default, the camera points at the center of the underlying image.                                                                                                       |
+| `is_yaw_only`            | Boolean | (Optional) When true, prevents roll and pitch. This is intended for stereo panoramas.                                                                                                                                                                       |
+| `loop`                   | Boolean | (Optional) When false, stops the loop in the video.                                                                                                                                                                                                         |
+| `hide_fullscreen_button` | Boolean | (Optional) When true, the fullscreen button contained inside the VR View iframe will be hidden. This parameter is useful if the user wants to use VR View's fullscreen workflow (via `vrView.setFullscreen()` callback) with an element outside the iframe. |
+| `volume`                 | Number  | (Optional) The initial volume of the media; it ranges between 0 and 1; zero equals muted.                                                                                                                                                                   |
+| `muted`                  | Boolean | (Optional) When true, mutes the sound of the video.                                                                                                                                                                                                         |
 
 # Downloading files
 
@@ -71,3 +71,11 @@ control. You must run `npm run build` prior to trying any of the examples.
 # Release Notes
 ## 2.0.2
 Close vulnerability with unsanitized user strings being injected into DOM
+
+
+# 重构方法
+- 放弃 iframe 嵌套
+- 不使用全局对象，使一个页面里可以渲染多个全景
+- 添加HTML锚点，锚点事件处理，不使用全局
+- 全景图的交互不使用全局
+- loading 不加在body上，加上元素上
