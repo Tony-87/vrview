@@ -79,3 +79,4 @@ Close vulnerability with unsanitized user strings being injected into DOM
 - 添加HTML锚点，锚点事件处理，不使用全局
 - 全景图的交互不使用全局
 - loading 不加在body上，加上元素上
+- 陀螺仪，手势控制，都不要全局的

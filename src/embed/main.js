@@ -266,6 +266,10 @@ function onModeChange(mode) {
 }
 
 function onHotspotClick(id) {
+  console.log('embed click ')
+  if (typeof spotClick === 'function') {
+    spotClick({ id: id })
+  }
   Util.sendParentMessage({
     type: 'click',
     data: { id: id }

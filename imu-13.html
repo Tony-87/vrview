@@ -1,0 +1,79 @@
+<html>
+<style>
+    #container {
+        margin: 20px;
+        padding: 20px
+    }
+
+    #deviceType {
+        text-align: center;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 3rem;
+        font-weight: bold;
+        color: #08f
+    }
+
+    #permission {
+        padding: 2rem 5rem;
+        background: #08f;
+        color: white;
+        margin-top: 30;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 3rem;
+        border: none;
+        border-radius: 1rem
+    }
+
+    #permissionStatus {
+        text-align: center;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 2.5rem;
+        font-weight: 600;
+        color: red;
+        margin-top: 30px
+    }
+</style>
+
+<body>
+    <div id="container">
+        <div id="deviceType"></div>
+        <div style="text-align: center">
+            <button id="permission">Ask for permission</button>
+        </div>
+        <div id="permissionStatus">Pending</div>
+        <div id="coor" style="font-size:30px;">-</div>
+    </div>
+</body>
+<script>
+
+    if (typeof DeviceMotionEvent.requestPermission === 'function') {
+        document.getElementById('deviceType').innerText = 'iOS 13'
+        document.getElementById('permission').addEventListener('click', function () {
+            console.log('button clicked')
+            DeviceMotionEvent.requestPermission().then(response => {
+
+                // This is showing "denied" without showing any permission popup
+                console.log(response)
+                document.getElementById('permissionStatus').innerText = response
+                if (response == 'granted') {
+                    window.addEventListener('devicemotion', (e) => {
+                        console.log("1111");
+                    })
+                }
+            }).catch(console.error)
+        });
+    } else {
+        // ignore this case for processing
+        console.log('non iOS 13')
+        document.getElementById('deviceType').innerText = 'non iOS 13'
+    }
+
+    window.addEventListener('deviceorientation', e => {
+
+        var result = 'alpha: ' + e.alpha + ',<br> gamma: ' + e.gamma + ',<br> beta: ' + e.beta + ',<br>target:' + e.target
+        console.log(e)
+        document.getElementById('coor').innerHTML = result
+    })
+</script>
+
+</html>

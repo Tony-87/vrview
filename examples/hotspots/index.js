@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-var vrView;
+var vrView
 
 // All the scenes for the experience
 var scenes = {
@@ -112,47 +112,48 @@ var scenes = {
       }
     }
   }
-};
+}
 
 function onLoad() {
+  alert('window load')
   vrView = new VRView.Player('#vrview', {
     image: 'blank.png',
     preview: 'blank.png',
     is_stereo: true,
     is_autopan_off: true
-  });
+  })
 
-  vrView.on('ready', onVRViewReady);
-  vrView.on('modechange', onModeChange);
-  vrView.on('click', onHotspotClick);
-  vrView.on('error', onVRViewError);
-  vrView.on('getposition', onGetPosition);
+  vrView.on('ready', onVRViewReady)
+  vrView.on('modechange', onModeChange)
+  vrView.on('click', onHotspotClick)
+  vrView.on('error', onVRViewError)
+  vrView.on('getposition', onGetPosition)
 }
 
 function onVRViewReady(e) {
-  console.log('onVRViewReady');
-  loadScene('walrus');
+  console.log('onVRViewReady')
+  loadScene('walrus')
 }
 
 function onModeChange(e) {
-  console.log('onModeChange', e.mode);
+  console.log('onModeChange', e.mode)
 }
 
 function onGetPosition(e) {
-  console.log(e);
+  console.log(e)
 
 }
 
 function onHotspotClick(e) {
   vrView.getPosition()
-  console.log('onHotspotClick', e.id);
+  console.log('onHotspotClick', e.id)
   if (e.id) {
-    loadScene(e.id);
+    loadScene(e.id)
   }
 }
 
 function loadScene(id) {
-  console.log('loadScene', id);
+  console.log('loadScene', id)
 
   // Set the image
   vrView.setContent({
@@ -160,26 +161,26 @@ function loadScene(id) {
     preview: scenes[id].preview,
     is_stereo: true,
     is_autopan_off: true
-  });
+  })
 
   // Add all the hotspots for the scene
-  var newScene = scenes[id];
-  var sceneHotspots = Object.keys(newScene.hotspots);
+  var newScene = scenes[id]
+  var sceneHotspots = Object.keys(newScene.hotspots)
   for (var i = 0; i < sceneHotspots.length; i++) {
-    var hotspotKey = sceneHotspots[i];
-    var hotspot = newScene.hotspots[hotspotKey];
+    var hotspotKey = sceneHotspots[i]
+    var hotspot = newScene.hotspots[hotspotKey]
 
     vrView.addHotspot(hotspotKey, {
       pitch: hotspot.pitch,
       yaw: hotspot.yaw,
       radius: hotspot.radius,
       distance: hotspot.distance
-    });
+    })
   }
 }
 
 function onVRViewError(e) {
-  console.log('Error! %s', e.message);
+  console.log('Error! %s', e.message)
 }
 
-window.addEventListener('load', onLoad);
+window.addEventListener('load', onLoad)

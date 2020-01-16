@@ -23,7 +23,16 @@
     <img src="images/ic_play_arrow_white_24dp.svg" />
   </div>
 
-
+  <div style="position: fixed;top:0;left:0;font-size:50px;>
+    <button onclick=" getGyro()"> get gyro</button>
+  </div>
+  <!-- <div id="container">
+    <div id="deviceType">non iOS 13</div>
+    <div style="text-align: center">
+      <button id="permission">Ask for permission</button>
+    </div>
+    <div id="permissionStatus">Pending</div>
+  </div> -->
 
   <script>
     WebVRConfig = {
@@ -32,11 +41,10 @@
     };
     // 页面配置，如果url参数没有配置，读取这里的配置信息
     WebVRConfig.PLAYER = {
-      image: './examples/hotspots/walrus.jpg',
+      image: './examples/img/dolphins.jpg',
       is_autopan_off: true,
       hide_fullscreen_button: true,
-      is_stereo: true,
-      is_autopan_off: true
+
       // video: 'video',
       // image: 'image',
       // preview: 'preview',
@@ -53,9 +61,34 @@
     }
 
     setTimeout(function () {
-
-      window.worldRenderer.hotspotRenderer.add(0, 20, 0.05, 1, 'abc')
+      // pitch: 0,
+      //   yaw: 110,
+      //     radius: 0.05,
+      //       distance: 1
+      window.worldRenderer.hotspotRenderer.add(0, 0, 0.05, 1, 'abc')
     }, 1000)
+
+    function spotClick(data) {
+      if (data.id) {
+        alert(JSON.stringify(data))
+      }
+      console.log(JSON.stringify(data))
+    }
+
+    function getGyro() {
+      if (!!window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === 'function') {
+        DeviceMotionEvent.requestPermission()
+          .then(response => {
+            if (response == 'granted') {
+              window.addEventListener('devicemotion', (e) => {
+
+              })
+            }
+          })
+          .catch(console.error)
+
+      }
+    }
   </script>
 
   <script src="build/three.js"></script>
