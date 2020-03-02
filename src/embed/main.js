@@ -267,6 +267,7 @@ function onModeChange(mode) {
 
 function onHotspotClick(id) {
   console.log('embed click ')
+  // 触发直接调用点击事件
   if (typeof spotClick === 'function') {
     spotClick({ id: id })
   }

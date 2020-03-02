@@ -23,8 +23,12 @@
     <img src="images/ic_play_arrow_white_24dp.svg" />
   </div>
 
-  <div style="position: fixed;top:0;left:0;font-size:50px;>
-    <button onclick=" getGyro()"> get gyro</button>
+  <div style="position: fixed;top:0;left:0;font-size:50px;border:solid 1px #f00;">
+    <button style="border:solid 1px #00f;font-size:30px;" onclick="getGyro()">click get gyro</button>
+    <br>
+    <button style="border:solid 1px #00f;font-size:30px;" ontouchstart="getGyro()">touchstart get gyro</button>
+    <br>
+    <button style="border:solid 1px #00f;font-size:30px;" onclick="getGyro()">touchend get gyro</button>
   </div>
   <!-- <div id="container">
     <div id="deviceType">non iOS 13</div>
