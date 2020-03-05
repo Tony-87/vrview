@@ -41,7 +41,8 @@
     "build-three-closure": "npm run _mkdir && rollup -c src/third_party/three/rollup.config.js && java -jar src/third_party/three/closure-compiler-v20160713.jar --warning_level=VERBOSE --jscomp_off=globalThis --jscomp_off=checkTypes --externs src/third_party/three/externs.js --language_in=ECMASCRIPT5_STRICT --js build/three.js --js_output_file build/three.min.js",
     "build-dms": "npm run _mkdir && uglifyjs scripts/js/device-motion-sender.js > build/device-motion-sender.min.js",
     "build-all": "npm run build-analytics; npm run build-three-closure; npm run build-dms",
-    "test": "npm run build"
+    "test": "npm run build",
+    "build-arview": "npm run _mkdir && browserify --standalone ARView src/embed/arview.js | derequire > build/arview.js && npm run build-three-closure"
   },
   "repository": {
     "type": "git",

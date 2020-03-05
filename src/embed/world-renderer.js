@@ -41,7 +41,7 @@ var AUTOPAN_ANGLE = 0.4;
  *   modechange(Boolean isVR): if the mode (eg. VR, fullscreen, etc) changes.
  */
 function WorldRenderer(params) {
-  this.init_(params.hideFullscreenButton);
+  this.init_(params);
 
   this.sphereRenderer = new SphereRenderer(this.scene);
   this.hotspotRenderer = new HotspotRenderer(this);
@@ -50,7 +50,7 @@ function WorldRenderer(params) {
   this.reticleRenderer = new ReticleRenderer(this.camera);
 
   // Get the VR Display as soon as we initialize.
-  navigator.getVRDisplays().then(function(displays) {
+  navigator.getVRDisplays().then(function (displays) {
     if (displays.length > 0) {
       this.vrDisplay = displays[0];
     }
@@ -59,7 +59,7 @@ function WorldRenderer(params) {
 }
 WorldRenderer.prototype = new EventEmitter();
 
-WorldRenderer.prototype.render = function(time) {
+WorldRenderer.prototype.render = function (time) {
   this.controls.update();
   TWEEN.update(time);
   this.effect.render(this.scene, this.camera);
@@ -69,9 +69,9 @@ WorldRenderer.prototype.render = function(time) {
 /**
  * @return {Promise} When the scene is fully loaded.
  */
-WorldRenderer.prototype.setScene = function(scene) {
+WorldRenderer.prototype.setScene = function (scene) {
   var self = this;
-  var promise = new Promise(function(resolve, reject) {
+  var promise = new Promise(function (resolve, reject) {
     self.sceneResolve = resolve;
     self.sceneReject = reject;
   });
@@ -98,14 +98,14 @@ WorldRenderer.prototype.setScene = function(scene) {
 
   // Set various callback overrides in iOS.
   if (Util.isIOS()) {
-    this.manager.setFullscreenCallback(function() {
-      Util.sendParentMessage({type: 'enter-fullscreen'});
+    this.manager.setFullscreenCallback(function () {
+      Util.sendParentMessage({ type: 'enter-fullscreen' });
     });
-    this.manager.setExitFullscreenCallback(function() {
-      Util.sendParentMessage({type: 'exit-fullscreen'});
+    this.manager.setExitFullscreenCallback(function () {
+      Util.sendParentMessage({ type: 'exit-fullscreen' });
     });
-    this.manager.setVRCallback(function() {
-      Util.sendParentMessage({type: 'enter-vr'});
+    this.manager.setVRCallback(function () {
+      Util.sendParentMessage({ type: 'enter-vr' });
     });
   }
 
@@ -113,7 +113,7 @@ WorldRenderer.prototype.setScene = function(scene) {
   if (scene.image && !scene.video) {
     if (scene.preview) {
       // First load the preview.
-      this.sphereRenderer.setPhotosphere(scene.preview, params).then(function() {
+      this.sphereRenderer.setPhotosphere(scene.preview, params).then(function () {
         // As soon as something is loaded, emit the load event to hide the
         // loading progress bar.
         self.didLoad_();
@@ -122,7 +122,7 @@ WorldRenderer.prototype.setScene = function(scene) {
       }).catch(self.didLoadFail_.bind(self));
     } else {
       // No preview -- go straight to rendering the full image.
-      this.sphereRenderer.setPhotosphere(scene.image, params).then(function() {
+      this.sphereRenderer.setPhotosphere(scene.image, params).then(function () {
         self.didLoad_();
       }).catch(self.didLoadFail_.bind(self));
     }
@@ -133,7 +133,7 @@ WorldRenderer.prototype.setScene = function(scene) {
       //
       // TODO(smus): Once video textures are supported, remove this fallback.
       if (scene.image) {
-        this.sphereRenderer.setPhotosphere(scene.image, params).then(function() {
+        this.sphereRenderer.setPhotosphere(scene.image, params).then(function () {
           self.didLoad_();
         }).catch(self.didLoadFail_.bind(self));
       } else {
@@ -141,12 +141,12 @@ WorldRenderer.prototype.setScene = function(scene) {
       }
     } else {
       this.player = new AdaptivePlayer(params);
-      this.player.on('load', function(videoElement, videoType) {
-        self.sphereRenderer.set360Video(videoElement, videoType, params).then(function() {
-          self.didLoad_({videoElement: videoElement});
+      this.player.on('load', function (videoElement, videoType) {
+        self.sphereRenderer.set360Video(videoElement, videoType, params).then(function () {
+          self.didLoad_({ videoElement: videoElement });
         }).catch(self.didLoadFail_.bind(self));
       });
-      this.player.on('error', function(error) {
+      this.player.on('error', function (error) {
         self.didLoadFail_('Video load error: ' + error);
       });
       this.player.load(scene.video);
@@ -163,17 +163,17 @@ WorldRenderer.prototype.setScene = function(scene) {
   return promise;
 };
 
-WorldRenderer.prototype.isVRMode = function() {
+WorldRenderer.prototype.isVRMode = function () {
   return !!this.vrDisplay && this.vrDisplay.isPresenting;
 };
 
-WorldRenderer.prototype.submitFrame = function() {
+WorldRenderer.prototype.submitFrame = function () {
   if (this.isVRMode()) {
     this.vrDisplay.submitFrame();
   }
 };
 
-WorldRenderer.prototype.disposeEye_ = function(eye) {
+WorldRenderer.prototype.disposeEye_ = function (eye) {
   if (eye) {
     if (eye.material.map) {
       eye.material.map.dispose();
@@ -183,14 +183,14 @@ WorldRenderer.prototype.disposeEye_ = function(eye) {
   }
 };
 
-WorldRenderer.prototype.dispose = function() {
+WorldRenderer.prototype.dispose = function () {
   var eyeLeft = this.scene.getObjectByName('eyeLeft');
   this.disposeEye_(eyeLeft);
   var eyeRight = this.scene.getObjectByName('eyeRight');
   this.disposeEye_(eyeRight);
 };
 
-WorldRenderer.prototype.destroy = function() {
+WorldRenderer.prototype.destroy = function () {
   if (this.player) {
     this.player.removeAllListeners();
     this.player.destroy();
@@ -213,7 +213,7 @@ WorldRenderer.prototype.destroy = function() {
   }
 };
 
-WorldRenderer.prototype.didLoad_ = function(opt_event) {
+WorldRenderer.prototype.didLoad_ = function (opt_event) {
   var event = opt_event || {};
   this.emit('load', event);
   if (this.sceneResolve) {
@@ -221,7 +221,7 @@ WorldRenderer.prototype.didLoad_ = function(opt_event) {
   }
 };
 
-WorldRenderer.prototype.didLoadFail_ = function(message) {
+WorldRenderer.prototype.didLoadFail_ = function (message) {
   this.emit('error', message);
   if (this.sceneReject) {
     this.sceneReject(message);
@@ -232,7 +232,7 @@ WorldRenderer.prototype.didLoadFail_ = function(message) {
  * Sets the default yaw.
  * @param {Number} angleRad The yaw in radians.
  */
-WorldRenderer.prototype.setDefaultYaw_ = function(angleRad) {
+WorldRenderer.prototype.setDefaultYaw_ = function (angleRad) {
   // Rotate the camera parent to take into account the scene's rotation.
   // By default, it should be at the center of the image.
   var display = this.controls.getVRDisplay();
@@ -249,17 +249,18 @@ WorldRenderer.prototype.setDefaultYaw_ = function(angleRad) {
  * Do the initial camera tween to rotate the camera, giving an indication that
  * there is live content there (on desktop only).
  */
-WorldRenderer.prototype.autopan = function(duration) {
+WorldRenderer.prototype.autopan = function (duration) {
   var targetY = this.camera.parent.rotation.y - AUTOPAN_ANGLE;
   var tween = new TWEEN.Tween(this.camera.parent.rotation)
-      .to({y: targetY}, AUTOPAN_DURATION)
-      .easing(TWEEN.Easing.Quadratic.Out)
-      .start();
+    .to({ y: targetY }, AUTOPAN_DURATION)
+    .easing(TWEEN.Easing.Quadratic.Out)
+    .start();
 };
 
-WorldRenderer.prototype.init_ = function(hideFullscreenButton) {
-  var container = document.querySelector('body');
-  var aspect = window.innerWidth / window.innerHeight;
+WorldRenderer.prototype.init_ = function (params) {
+  var hideFullscreenButton = params.hideFullscreenButton
+  var container = document.querySelector(params.selector);
+  var aspect = container.clientWidth / container.clientHeight;
   var camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 100);
   camera.layers.enable(1);
 
@@ -267,9 +268,9 @@ WorldRenderer.prototype.init_ = function(hideFullscreenButton) {
   cameraDummy.add(camera);
 
   // Antialiasing disabled to improve performance.
-  var renderer = new THREE.WebGLRenderer({antialias: false});
+  var renderer = new THREE.WebGLRenderer({ antialias: false });
   renderer.setClearColor(0x000000, 0);
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
 
   container.appendChild(renderer.domElement);
@@ -279,7 +280,7 @@ WorldRenderer.prototype.init_ = function(hideFullscreenButton) {
 
   // Disable eye separation.
   effect.scale = 0;
-  effect.setSize(window.innerWidth, window.innerHeight);
+  effect.setSize(container.clientWidth, container.clientHeight);
 
   // Present submission of frames automatically. This is done manually in
   // submitFrame().
@@ -289,7 +290,7 @@ WorldRenderer.prototype.init_ = function(hideFullscreenButton) {
   this.renderer = renderer;
   this.effect = effect;
   this.controls = controls;
-  this.manager = new WebVRManager(renderer, effect, {predistorted: false, hideButton: hideFullscreenButton});
+  this.manager = new WebVRManager(renderer, effect, { predistorted: false, hideButton: hideFullscreenButton });
 
   this.scene = this.createScene_();
   this.scene.add(this.camera.parent);
@@ -298,20 +299,20 @@ WorldRenderer.prototype.init_ = function(hideFullscreenButton) {
   // Watch the resize event.
   window.addEventListener('resize', this.onResize_.bind(this));
 
-  // Prevent context menu.
+  // Prevent context menu. 
   window.addEventListener('contextmenu', this.onContextMenu_.bind(this));
 
   window.addEventListener('vrdisplaypresentchange',
-                          this.onVRDisplayPresentChange_.bind(this));
+    this.onVRDisplayPresentChange_.bind(this));
 };
 
-WorldRenderer.prototype.onResize_ = function() {
-  this.effect.setSize(window.innerWidth, window.innerHeight);
-  this.camera.aspect = window.innerWidth / window.innerHeight;
+WorldRenderer.prototype.onResize_ = function () {
+  this.effect.setSize(container.clientWidth, container.clientHeight);
+  this.camera.aspect = container.clientWidth / container.clientHeight;
   this.camera.updateProjectionMatrix();
 };
 
-WorldRenderer.prototype.onVRDisplayPresentChange_ = function(e) {
+WorldRenderer.prototype.onVRDisplayPresentChange_ = function (e) {
   if (Util.isDebug()) {
     console.log('onVRDisplayPresentChange_');
   }
@@ -331,14 +332,14 @@ WorldRenderer.prototype.onVRDisplayPresentChange_ = function(e) {
 
   // When exiting VR mode from iOS, make sure we emit back an exit-fullscreen event.
   if (!isVR && Util.isIOS()) {
-    Util.sendParentMessage({type: 'exit-fullscreen'});
+    Util.sendParentMessage({ type: 'exit-fullscreen' });
   }
 
   // Emit a mode change event back to any listeners.
   this.emit('modechange', isVR);
 };
 
-WorldRenderer.prototype.createScene_ = function(opt_params) {
+WorldRenderer.prototype.createScene_ = function (opt_params) {
   var scene = new THREE.Scene();
 
   // Add a group for the photosphere.
@@ -349,21 +350,21 @@ WorldRenderer.prototype.createScene_ = function(opt_params) {
   return scene;
 };
 
-WorldRenderer.prototype.onHotspotFocus_ = function(id) {
+WorldRenderer.prototype.onHotspotFocus_ = function (id) {
   // Set the default cursor to be a pointer.
   this.setCursor_('pointer');
 };
 
-WorldRenderer.prototype.onHotspotBlur_ = function(id) {
+WorldRenderer.prototype.onHotspotBlur_ = function (id) {
   // Reset the default cursor to be the default one.
   this.setCursor_('');
 };
 
-WorldRenderer.prototype.setCursor_ = function(cursor) {
+WorldRenderer.prototype.setCursor_ = function (cursor) {
   this.renderer.domElement.style.cursor = cursor;
 };
 
-WorldRenderer.prototype.onContextMenu_ = function(e) {
+WorldRenderer.prototype.onContextMenu_ = function (e) {
   e.preventDefault();
   e.stopPropagation();
   return false;

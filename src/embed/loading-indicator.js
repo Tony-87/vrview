@@ -16,16 +16,21 @@
 /**
  * Shows a 2D loading indicator while various pieces of EmbedVR load.
  */
-function LoadingIndicator() {
+function LoadingIndicator(viewEl) {
   this.el = this.build_();
-  document.body.appendChild(this.el);
+  if (viewEl) {
+    viewEl.appendChild(this.el)
+  }
+  else {
+    document.body.appendChild(this.el);
+  }
   this.show();
 }
 
-LoadingIndicator.prototype.build_ = function() {
+LoadingIndicator.prototype.build_ = function () {
   var overlay = document.createElement('div');
   var s = overlay.style;
-  s.position = 'fixed';
+  s.position = 'absolute';
   s.top = 0;
   s.left = 0;
   s.width = '100%';
@@ -43,11 +48,11 @@ LoadingIndicator.prototype.build_ = function() {
   return overlay;
 };
 
-LoadingIndicator.prototype.hide = function() {
+LoadingIndicator.prototype.hide = function () {
   this.el.style.display = 'none';
 };
 
-LoadingIndicator.prototype.show = function() {
+LoadingIndicator.prototype.show = function () {
   this.el.style.display = 'block';
 };
 
